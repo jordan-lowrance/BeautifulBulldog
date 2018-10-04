@@ -6,26 +6,38 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 
 public class BulldogAdapter extends RecyclerView.Adapter<BulldogAdapter.BulldogViewHolder>{
 
+    private final RecyclerViewClickListener mListener;
     private Context context;
     private ArrayList<Bulldog> bulldogs;
 
-    public BulldogAdapter(Context context, ArrayList<Bulldog> dataSet){
+    public BulldogAdapter(Context context, ArrayList<Bulldog> dataSet, RecyclerViewClickListener clickListener) {
         this.context = context;
         this.bulldogs = dataSet;
+        this.mListener = clickListener;
     }
 
-    public static class BulldogViewHolder extends RecyclerView.ViewHolder {
+
+    public static class BulldogViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView nameView;
         public TextView ageView;
-        public BulldogViewHolder(View v) {
+        private RecyclerViewClickListener mListener;
+
+        @Override
+        public void onClick(View view) {
+            mListener.onClick(view, getAdapterPosition());
+
+
+        }
+        public BulldogViewHolder(View v, RecyclerViewClickListener listener) {
             super(v);
             nameView = v.findViewById(R.id.name_view);
             ageView = v.findViewById(R.id.age_view);
+            mListener = listener;
+            v.setOnClickListener(this);
         }
 
     }
@@ -36,13 +48,14 @@ public class BulldogAdapter extends RecyclerView.Adapter<BulldogAdapter.BulldogV
     }
 
     @Override
-    public BulldogAdapter.BulldogViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
-        //create a new view
+    public BulldogAdapter.BulldogViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        // create a new view
         View v = (View) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.bulldog_cell,parent,false);
-        BulldogViewHolder vh = new BulldogViewHolder(v);
+                .inflate(R.layout.bulldog_cell, parent, false);
+        BulldogViewHolder vh = new BulldogViewHolder(v, mListener);
         return vh;
     }
+
 
     @Override
     public void onBindViewHolder(BulldogViewHolder holder, int position){

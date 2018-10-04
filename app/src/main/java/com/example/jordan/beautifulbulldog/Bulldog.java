@@ -1,6 +1,8 @@
 package com.example.jordan.beautifulbulldog;
 
-public class Bulldog {
+import java.io.Serializable;
+
+public class Bulldog implements Serializable {
     private String age;
     private String name;
 
