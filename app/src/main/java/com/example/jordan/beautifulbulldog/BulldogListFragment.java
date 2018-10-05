@@ -9,8 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import java.util.ArrayList;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 
 /**
@@ -35,29 +36,21 @@ public class BulldogListFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_bulldog_list_fragement, container, false);
 
-        final ArrayList<Bulldog> bulldogs = new ArrayList<>();
-        bulldog_list = view.findViewById(R.id.bulldog_list);
-
-        Bulldog bulldog1 = new Bulldog();
-        bulldog1.setAge("9");
-        bulldog1.setName("Porterhouse");
-
-        Bulldog bulldog2 = new Bulldog();
-        bulldog2.setAge("2");
-        bulldog2.setName("Drake");
-
-        bulldogs.add(bulldog1);
-        bulldogs.add(bulldog2);
+        Realm realm = Realm.getDefaultInstance();
+        final RealmResults<Bulldog> bulldogs = realm.where(Bulldog.class).findAll();
 
         layoutManager = new LinearLayoutManager(getContext());
         bulldog_list.setLayoutManager(layoutManager);
+
+        final MainActivity mainActivity = (MainActivity) this.getActivity();
 
         RecyclerViewClickListener listener = new RecyclerViewClickListener() {
             @Override
             public void onClick(View view, int position) {
                 Bulldog bulldog = bulldogs.get(position);
                 Intent intent = new Intent(view.getContext(), BulldogActivity.class);
-                intent.putExtra("bulldog",bulldog);
+                intent.putExtra("username", mainActivity.user.getUsername());
+                intent.putExtra("bulldog", bulldog.getId());
                 startActivity(intent);
             }
         };

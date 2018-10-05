@@ -1,10 +1,22 @@
 package com.example.jordan.beautifulbulldog;
 
-import java.io.Serializable;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
-public class Bulldog implements Serializable {
-    private String age;
+public class Bulldog extends RealmObject {
+    @PrimaryKey
+    private String id;
     private String name;
+    private String age;
+    private byte[] image;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -20,5 +32,13 @@ public class Bulldog implements Serializable {
 
     public void setAge(String age) {
         this.age = age;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 }
